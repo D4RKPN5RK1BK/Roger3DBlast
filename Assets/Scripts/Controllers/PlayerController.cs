@@ -8,11 +8,17 @@ using static PlayerActions;
 // Отвечает за взаимодействие объекта с внешними триггерами и за его инициализацию
 public class PlayerController : MonoBehaviour
 {
-    public float PlayerSpeed;
+    [Min(0)]
+    public float PlayerSpeed = 1;
+    [Min(0)]
+    public float PlayerRotationSpeed = 1;
+    [Min(0)]
+    public float PlayerJumpForce = 10;
     private PlayerActions playerActions;
     private Rigidbody rigetbody;
     private GameObject camera;
     private bool playerCanJump;
+    private bool playerJumpPosition;
 
     void Awake() {
         playerActions = new PlayerActions();
@@ -45,14 +51,14 @@ public class PlayerController : MonoBehaviour
         rigetbody.AddForce(new Vector3(layedMove.x, 0, layedMove.z) * PlayerSpeed);
 
         if (Vector2.zero != move)
-            transform.forward = layedMove;
+            transform.forward = Vector3.RotateTowards(transform.forward, layedMove, Time.deltaTime * PlayerRotationSpeed, 0).normalized;
     }
 
     void Jump(InputAction.CallbackContext context) {
         
         if (playerCanJump) {
-            Debug.Log("Player Jump!");
-            rigetbody.AddForce(new Vector3(0, 10, 0), ForceMode.VelocityChange);
+            playerJumpPosition = true;
+            rigetbody.AddForce(new Vector3(0, PlayerJumpForce, 0), ForceMode.VelocityChange);
             playerCanJump = false;
         }
     }
@@ -65,8 +71,20 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision other) {
         if (other.gameObject.tag == "Surface") {
+            playerJumpPosition = false;
             playerCanJump = true;
         }
+    }
+
+    void OnCollisionExit(Collision other) {
+        if (other.gameObject.tag == "Surface") {
+            playerJumpPosition = true;
+            playerCanJump = true;
+        }
+    }
+
+    public bool GetJumpState() {
+        return playerJumpPosition;
     }
 
 }
