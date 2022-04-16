@@ -1,6 +1,11 @@
 using System;
 using UnityEngine;
 
+/*
+*   Класс возможно будет применяться не только к игроку но и ко всему "Вагону", так что ObservableObject не должен крутиться вместе с персонажем.
+*   
+*/
+
 public class CameraController : MonoBehaviour
 {
     [Min(0)]
@@ -64,9 +69,12 @@ public class CameraController : MonoBehaviour
     }
 
     // Update is called once per frame
+    /*
+    *   Спустя несколько фреймов после старта сцены система считывает все совершенные за несколько фреймов движеня мыши
+    *   что в 90% случаев приводит к тому что камера находиться не на задуманной начальной позиции а хер пойми где
+    */
     void Update()
     {
-        // Debug.Log(cameraActions.InGame.RotateCamera.ReadValue<Vector2>());
         transform.position = observableObject.transform.position + offset;
         Vector2 angle = cameraActions.InGame.RotateCamera.ReadValue<Vector2>() * Time.deltaTime * RotationSpeed;
 

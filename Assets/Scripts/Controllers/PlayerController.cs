@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,33 +15,69 @@ public class PlayerController : MonoBehaviour
     public float PlayerRotationSpeed = 1;
     [Min(0)]
     public float PlayerJumpForce = 10;
+    private GameObject character;
     private PlayerActions playerActions;
     private Rigidbody rigetbody;
     private GameObject observerCamera;
     private bool playerCanJump;
     private bool playerJumpPosition;
 
-    void Awake() {
+    void Awake()
+    {
         playerActions = new PlayerActions();
         rigetbody = GetComponent<Rigidbody>();
     }
 
-    void OnEnable() {
+    void OnEnable()
+    {
         playerActions.Enable();
     }
 
-    void OnDisable(){
+    void OnDisable()
+    {
         playerActions.Disable();
     }
 
-    void Start() {
-        observerCamera = FindObjectOfType<CameraController>().gameObject;
+    void Start()
+    {
+        try
+        {
+            observerCamera = FindObjectOfType<CameraController>().gameObject;
+        }
+        catch (NullReferenceException ex)
+        {
+            Debug.LogWarning(ex.Message);
+            observerCamera = Camera.main.gameObject;
+        }
+
+        try
+        {
+            foreach (Transform t in transform)
+            {
+                if (t.tag == "Character")
+                {
+                    character = t.gameObject;
+                }
+            }
+
+            if (character == null)
+            {
+                throw new Exception("Не найден дочерний объект с тегом \"Character\"!");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning(ex.Message);
+            character = Instantiate(new GameObject());
+        }
+
         playerActions.InGame.Jump.performed += Jump;
         playerActions.InGame.Activate.performed += Activate;
     }
 
-    // Обновляется каждый фрейм, отвечает за движения персонажа и его вращение
-    void Update() {
+
+    void Update()
+    {
         Vector2 move = playerActions.InGame.Move.ReadValue<Vector2>();
         Vector3 cameraPos = observerCamera.transform.position;
 
@@ -51,39 +88,47 @@ public class PlayerController : MonoBehaviour
         rigetbody.AddForce(new Vector3(layedMove.x, 0, layedMove.z) * PlayerSpeed);
 
         if (Vector2.zero != move)
-            transform.forward = Vector3.RotateTowards(transform.forward, layedMove, Time.deltaTime * PlayerRotationSpeed, 0).normalized;
+            character.transform.forward = Vector3.RotateTowards(character.transform.forward, layedMove, Time.deltaTime * PlayerRotationSpeed, 0).normalized;
     }
 
-    void Jump(InputAction.CallbackContext context) {
-        
-        if (playerCanJump) {
+    void Jump(InputAction.CallbackContext context)
+    {
+
+        if (playerCanJump)
+        {
             playerJumpPosition = true;
             rigetbody.AddForce(new Vector3(0, PlayerJumpForce, 0), ForceMode.VelocityChange);
             playerCanJump = false;
         }
     }
 
-    void Activate(InputAction.CallbackContext context) {
+    void Activate(InputAction.CallbackContext context)
+    {
         Debug.Log("Player Activate his current ability!");
 
-        
+
     }
 
-    void OnCollisionEnter(Collision other) {
-        if (other.gameObject.tag == "Surface") {
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Surface")
+        {
             playerJumpPosition = false;
             playerCanJump = true;
         }
     }
 
-    void OnCollisionExit(Collision other) {
-        if (other.gameObject.tag == "Surface") {
+    void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.tag == "Surface")
+        {
             playerJumpPosition = true;
-            playerCanJump = true;
+            playerCanJump = false;
         }
     }
 
-    public bool GetJumpState() {
+    public bool GetJumpState()
+    {
         return playerJumpPosition;
     }
 
