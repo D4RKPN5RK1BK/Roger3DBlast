@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     public float PlayerJumpForce = 10;
     private PlayerActions playerActions;
     private Rigidbody rigetbody;
-    private GameObject camera;
+    private GameObject observerCamera;
     private bool playerCanJump;
     private bool playerJumpPosition;
 
@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void Start() {
-        camera = FindObjectOfType<CameraController>().gameObject;
+        observerCamera = FindObjectOfType<CameraController>().gameObject;
         playerActions.InGame.Jump.performed += Jump;
         playerActions.InGame.Activate.performed += Activate;
     }
@@ -42,10 +42,10 @@ public class PlayerController : MonoBehaviour
     // Обновляется каждый фрейм, отвечает за движения персонажа и его вращение
     void Update() {
         Vector2 move = playerActions.InGame.Move.ReadValue<Vector2>();
-        Vector3 cameraPos = camera.transform.position;
+        Vector3 cameraPos = observerCamera.transform.position;
 
         Vector3 forward = new Vector3(transform.position.x - cameraPos.x, 0, transform.position.z - cameraPos.z).normalized * move.y;
-        Vector3 right = camera.transform.right.normalized * move.x;
+        Vector3 right = observerCamera.transform.right.normalized * move.x;
 
         Vector3 layedMove = forward + right;
         rigetbody.AddForce(new Vector3(layedMove.x, 0, layedMove.z) * PlayerSpeed);

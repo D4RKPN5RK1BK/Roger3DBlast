@@ -6,14 +6,14 @@ public class PlayerAnimation : MonoBehaviour
 {
 
     private Animator animator;
-    private Rigidbody rigidbody;
+    private Rigidbody playerRigidbody;
     private PlayerController player;
 
     // Start is called before the first frame update
     void Start()
     {
         player = FindObjectOfType<PlayerController>();
-        rigidbody = player.GetComponent<Rigidbody>();
+        playerRigidbody = player.GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
     }
 
@@ -21,6 +21,6 @@ public class PlayerAnimation : MonoBehaviour
     void Update()
     {
         animator.SetBool("PlayerJump", player.GetJumpState());
-        animator.SetFloat("PlayerSpeed", rigidbody.velocity.magnitude);
+        animator.SetFloat("PlayerSpeed", playerRigidbody.velocity.magnitude);
     }
 }
