@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Carriage
   - Surface
+  - ObservablePoint
+  - Character
+  - FloatingArea
+  - CarriagePickupArea
   layers:
   - Default
   - TransparentFX
