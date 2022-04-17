@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class CarriageController : MonoBehaviour
 {
-
-    private GameObject folowingObject;
+    [NonSerialized]
+    public GameObject FolowingObject;
     private Rigidbody objRigidbody;
+    private TrainController trainHead;
     void Start()
     {
         try
@@ -35,32 +36,41 @@ public class CarriageController : MonoBehaviour
         }
     }
 
-    void Awake() {
+    void Awake()
+    {
         Debug.Log("Carriage object was successefuly intialized!");
     }
 
     void Update()
     {
-        if (folowingObject != null) {
-            Debug.Log("folowing object exists");
-            Vector3 folowingForce = folowingObject.transform.position - transform.position;
+        if (FolowingObject != null)
+        {
+
+            Vector3 direction = FolowingObject.transform.position - transform.position;
+            Vector3 folowingForce = direction.normalized *  Mathf.Pow(direction.magnitude, 2) - direction.normalized * trainHead.CarriageDistance;
             objRigidbody.AddForce(folowingForce);
         }
-        
+
     }
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Carriage entered trigger area: " + other.tag);
-        if (other.tag == "CarriagePickupArea" && folowingObject == null)
+        if (other.tag == "CarriagePickupArea" && FolowingObject == null)
         {
-            folowingObject = other.gameObject;
+            Debug.Log("train trigger enter");
+            trainHead = other.transform.parent.gameObject.GetComponent<TrainController>();
+            trainHead.AddCarriage(this);
         }
     }
 
     public void SetFree()
     {
-        folowingObject = null;
+        FolowingObject = null;
+    }
+
+    public void SetFolowingObject(GameObject following)
+    {
+        FolowingObject = following;
     }
 
 }

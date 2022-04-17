@@ -24,14 +24,4 @@ public class Floater : MonoBehaviour
         }
         
     }
-
-    void OnTriggerEnter(Collider other) {
-       Debug.Log("FloaterTriggerEnter");
-        
-    }
-
-    void ForceUpward() {
-
-    }
-
 }
