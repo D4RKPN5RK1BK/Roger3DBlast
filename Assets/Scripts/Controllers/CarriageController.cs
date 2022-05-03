@@ -38,7 +38,7 @@ public class CarriageController : MonoBehaviour
 
     void Awake()
     {
-        Debug.Log("Carriage object was successefuly intialized!");
+        // Debug.Log("Carriage object was successefuly intialized!");
     }
 
     void Update()

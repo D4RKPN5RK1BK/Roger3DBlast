@@ -5,8 +5,18 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static PlayerActions;
 
+/*
+*   Отвечает за взаимодействие объекта с внешними триггерами и за его инициализацию   
+*
+*   Просто так это выбрасывать не хочется, да и к тому же интересным было бы сделать этот класс
+*   и CharacterController взаимозаменяемым (в один клик) чтобы потом мобам легче было с физикой взаимодействовать
+*
+*   Нужно определить что конкретно будет лежать на данных контроллерах
+*   У игрока по сути обработка и ответ на инпуты, так что у мобов скорее всего
+*   Обработка их стейтов и изменение поведения в зависисоти от окружения сцены.
+*/
 
-// Отвечает за взаимодействие объекта с внешними триггерами и за его инициализацию
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
     [Min(0)]
@@ -21,12 +31,6 @@ public class PlayerController : MonoBehaviour
     private GameObject observerCamera;
     private bool playerCanJump;
     private bool playerJumpPosition;
-
-    void Awake()
-    {
-        playerActions = new PlayerActions();
-        rigetbody = GetComponent<Rigidbody>();
-    }
 
     void OnEnable()
     {
@@ -71,6 +75,12 @@ public class PlayerController : MonoBehaviour
             character = Instantiate(new GameObject());
         }
 
+        
+    }
+
+    void Awake() {
+        rigetbody = GetComponent<Rigidbody>();
+        playerActions = new PlayerActions();
         playerActions.InGame.Jump.performed += Jump;
         playerActions.InGame.Activate.performed += Activate;
     }

@@ -40,7 +40,7 @@ public class CameraController : MonoBehaviour
     {
         try
         {
-            GameObject player = FindObjectOfType<PlayerController>().gameObject;
+            GameObject player = FindObjectOfType<CharacterController>().gameObject;
             foreach (Transform t in player.transform)
             {
                 if (String.Equals(t.tag, "ObservablePoint"))
