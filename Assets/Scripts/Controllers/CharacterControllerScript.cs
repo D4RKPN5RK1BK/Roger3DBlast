@@ -5,34 +5,36 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /*
-*   Остановился на том что решил прописать собственную гравиацию.
-*   После нее соответственно нужно решить как тут все привести в порядок
-*
-*   В данный момент тут целая солянки из ЖЕЛАТЕЛЬНО разных классов
+*   Также как и остальные контроллеры отвечает за инициализацию всех зависимостей и компонентов
+*   объекта, а также за обработку инпутов
 *
 *   Идеально было бы разбить на:
-*   - класс обрабатывающий инпуты
-*   - класс отвечающий за гравитацию
+*   - [CHECK] класс отвечающий за гравитацию 
 *   - всякие приколы по типу проверки родительских компонентов на соответствие
 *     или поиск других объектов в сцене тоже вынести отдельно
+*   - класс или апи для конвертации векторов (трансляция векторов от камеры объекту
+*     или проекция векторов на плоскость)
 */
 
 [Serializable]
 [RequireComponent(typeof(CharacterController))]
 public class CharacterControllerScript : MonoBehaviour
 {
-    [Min(0)]
-    public float PlayerSpeed = 1;
+    
     [Min(0)]
     public float PlayerRotationSpeed = 1;
     
     private GameObject character;
+    
     private PlayerActions playerActions;
+    
     private GameObject observerCamera;
+    
     [SerializeField]
-    private GravityController controller;
+    public GravityController Gravity;
 
-    private Vector3 velocity;
+    private float JumpStartTime;
+
 
     void OnEnable()
     {
@@ -49,7 +51,7 @@ public class CharacterControllerScript : MonoBehaviour
         playerActions = new PlayerActions();
         playerActions.InGame.Jump.performed += Jump;
         playerActions.InGame.Activate.performed += Activate;
-        controller = new GravityController(GetComponent<CharacterController>());
+        Gravity = new GravityController(GetComponent<CharacterController>());
     }
 
     // Start is called before the first frame update
@@ -93,14 +95,19 @@ public class CharacterControllerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 move = playerActions.InGame.Move.ReadValue<Vector2>();
-        Vector3 cameraPos = observerCamera.transform.position;
 
+        if (playerActions.InGame.Jump.IsPressed()) {
+            Gravity.ContinueJump();
+        } 
+
+        Vector2 move = playerActions.InGame.Move.ReadValue<Vector2>();
+        
+        Vector3 cameraPos = observerCamera.transform.position;
         Vector3 forward = new Vector3(transform.position.x - cameraPos.x, 0, transform.position.z - cameraPos.z).normalized * move.y;
         Vector3 right = observerCamera.transform.right.normalized * move.x;
-
         Vector3 layedMove = forward + right;
-        controller.Move(new Vector3(layedMove.x, 0, layedMove.z) * PlayerSpeed);
+
+        Gravity.Move(new Vector3(layedMove.x, 0, layedMove.z));
 
         if (Vector2.zero != move)
             character.transform.forward = Vector3.RotateTowards(character.transform.forward, layedMove, Time.deltaTime * PlayerRotationSpeed, 0).normalized;
@@ -116,7 +123,8 @@ public class CharacterControllerScript : MonoBehaviour
 
     void Jump(InputAction.CallbackContext context)
     {
-        controller.Jump();
+        Debug.Log("Jump action was perfomed");
+        Gravity.Jump(Time.time);
     }
 
 }

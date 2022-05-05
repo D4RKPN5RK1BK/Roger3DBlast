@@ -8,19 +8,35 @@ public class GravityController
 {
     private CharacterController controller;
 
-    public float FallSpeed = 1;
-    public float GravityPressure = 1;
+    private float jumpStartTime;
+
     [Min(0)]
-    public float PlayerJumpForce = 10;
-    public float WalkSpeed = 1;
+    public float JumpForce = 1;
+
+    [Min(0)]
+    public float JumpContinueTime;
+
+    public float JumpContinueForce;
+
     [Range(0, 1)]
-    public float JumpControll = 1;
-    public float JumpStrnght = 10;
+    public float JumpControl = 1;
+
+    [Min(0)]
+    public float FallSpeed = 1;
+
+    [Min(0)]
+    public float GravityPressure = 1;
+
+    [Min(0)]
+    public float WalkSpeed = 1;
+
     [Range(0, 1)]
     public float Drag = 0.1f;
+
     private Vector3 inertion = Vector3.zero;
 
-    public GravityController(CharacterController controller) {
+    public GravityController(CharacterController controller)
+    {
         this.controller = controller;
     }
 
@@ -49,10 +65,19 @@ public class GravityController
 
     }
 
-    public void Jump()
+    public void Jump(float time)
     {
         if (controller.isGrounded)
-            inertion += Vector3.up * PlayerJumpForce;
+        {
+            jumpStartTime = time;
+            inertion += Vector3.up * JumpForce;
+        }
+    }
+
+    public void ContinueJump()
+    {
+        if (jumpStartTime + JumpContinueTime > Time.time)
+            inertion += Vector3.up * JumpContinueForce * Time.deltaTime;
     }
 
 
