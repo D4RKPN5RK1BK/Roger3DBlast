@@ -55,8 +55,8 @@ GameObject:
   - component: {fileID: 3758131037633141085}
   - component: {fileID: -3155746529459735924}
   - component: {fileID: -1109145742288414477}
-  - component: {fileID: -8460056520462621107}
-  - component: {fileID: -4493161786942018027}
+  - component: {fileID: 9112853581144595384}
+  - component: {fileID: 5361522909160091452}
   m_Layer: 0
   m_Name: PlayerWIthCharacterController
   m_TagString: Player
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_DefaultActionMap: InGame
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!143 &-8460056520462621107
+--- !u!143 &9112853581144595384
 CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -200,13 +200,13 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_Radius: 0.3
+  m_SlopeLimit: 180
+  m_StepOffset: 1
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &-4493161786942018027
+--- !u!114 &5361522909160091452
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -219,8 +219,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerSpeed: 1
-  PlayerRotationSpeed: 1
-  PlayerJumpForce: 10
+  PlayerRotationSpeed: 10
+  controller:
+    PlayerJumpForce: 0
+    WalkSpeed: 0
+    JumpControll: 0
+    JumpStrnght: 0
+    Drag: 0.097
 --- !u!1 &6183395975278342408
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,19 +354,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c6c62a0b9b66a1b418c482d8d3d690ed, type: 3}
   m_PrefabInstance: {fileID: 8310671680608603418}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &2124734827368582313
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9192979394214113355}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5, y: 2, z: 0.5}
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!95 &6751822988585923160
 Animator:
   serializedVersion: 3

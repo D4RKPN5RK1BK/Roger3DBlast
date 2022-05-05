@@ -17,6 +17,7 @@ using UnityEngine.InputSystem;
 *     или поиск других объектов в сцене тоже вынести отдельно
 */
 
+[Serializable]
 [RequireComponent(typeof(CharacterController))]
 public class CharacterControllerScript : MonoBehaviour
 {
@@ -24,12 +25,12 @@ public class CharacterControllerScript : MonoBehaviour
     public float PlayerSpeed = 1;
     [Min(0)]
     public float PlayerRotationSpeed = 1;
-    [Min(0)]
-    public float PlayerJumpForce = 10;
+    
     private GameObject character;
     private PlayerActions playerActions;
     private GameObject observerCamera;
-    private CharacterController controller;
+    [SerializeField]
+    private GravityController controller;
 
     private Vector3 velocity;
 
@@ -48,7 +49,7 @@ public class CharacterControllerScript : MonoBehaviour
         playerActions = new PlayerActions();
         playerActions.InGame.Jump.performed += Jump;
         playerActions.InGame.Activate.performed += Activate;
-        controller = GetComponent<CharacterController>();
+        controller = new GravityController(GetComponent<CharacterController>());
     }
 
     // Start is called before the first frame update
@@ -103,10 +104,6 @@ public class CharacterControllerScript : MonoBehaviour
 
         if (Vector2.zero != move)
             character.transform.forward = Vector3.RotateTowards(character.transform.forward, layedMove, Time.deltaTime * PlayerRotationSpeed, 0).normalized;
-
-        if (!controller.isGrounded) {
-            controller.Move(new Vector3(0, -Time.deltaTime, 0));
-        }
         
     }
 
@@ -119,12 +116,7 @@ public class CharacterControllerScript : MonoBehaviour
 
     void Jump(InputAction.CallbackContext context)
     {
-
-        if (controller.isGrounded)
-        {
-            Debug.Log("Player used jump");
-
-        }
+        controller.Jump();
     }
 
 }
