@@ -220,14 +220,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerRotationSpeed: 10
   Gravity:
-    JumpForce: 0
-    JumpContinueTime: 0
-    JumpContinueForce: 0
-    JumpControl: 0
-    FallSpeed: 0
-    GravityPressure: 0
-    WalkSpeed: 0
-    Drag: 0
+    JumpForce: 1
+    JumpContinueTime: 1
+    JumpContinueForce: 1
+    JumpControl: 1
+    FallSpeed: 1
+    GravityPressure: 1
+    WalkSpeed: 1
+    Drag: 0.069
+    JumpDrag: 0.073
 --- !u!1 &6183395975278342408
 GameObject:
   m_ObjectHideFlags: 0

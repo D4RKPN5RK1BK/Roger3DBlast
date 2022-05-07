@@ -4,17 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/*
-*   Также как и остальные контроллеры отвечает за инициализацию всех зависимостей и компонентов
-*   объекта, а также за обработку инпутов
-*
-*   Идеально было бы разбить на:
-*   - [CHECK] класс отвечающий за гравитацию 
-*   - всякие приколы по типу проверки родительских компонентов на соответствие
-*     или поиск других объектов в сцене тоже вынести отдельно
-*   - класс или апи для конвертации векторов (трансляция векторов от камеры объекту
-*     или проекция векторов на плоскость)
-*/
+/**
+ *   Также как и остальные контроллеры отвечает за инициализацию всех зависимостей и компонентов
+ *   объекта, а также за обработку инпутов
+ *
+ *
+ *   Идеально было бы разбить на:
+ *   - [CHECK] класс отвечающий за гравитацию 
+ *   - всякие приколы по типу проверки родительских компонентов на соответствие
+ *     или поиск других объектов в сцене тоже вынести отдельно
+ *   - класс или апи для конвертации векторов (трансляция векторов от камеры объекту
+ *     или проекция векторов на плоскость)
+**/
 
 [Serializable]
 [RequireComponent(typeof(CharacterController))]
@@ -51,7 +52,7 @@ public class CharacterControllerScript : MonoBehaviour
         playerActions = new PlayerActions();
         playerActions.InGame.Jump.performed += Jump;
         playerActions.InGame.Activate.performed += Activate;
-        Gravity = new GravityController(GetComponent<CharacterController>());
+        Gravity.SetController(GetComponent<CharacterController>());
     }
 
     // Start is called before the first frame update

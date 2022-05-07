@@ -1947,6 +1947,38 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerWIthCharacterController
       objectReference: {fileID: 0}
+    - target: {fileID: 5361522909160091452, guid: 5d18e27edb05fb74db9729636c5d9fc3, type: 3}
+      propertyPath: Gravity.Drag
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5361522909160091452, guid: 5d18e27edb05fb74db9729636c5d9fc3, type: 3}
+      propertyPath: Gravity.JumpDrag
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5361522909160091452, guid: 5d18e27edb05fb74db9729636c5d9fc3, type: 3}
+      propertyPath: Gravity.FallSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5361522909160091452, guid: 5d18e27edb05fb74db9729636c5d9fc3, type: 3}
+      propertyPath: Gravity.JumpForce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5361522909160091452, guid: 5d18e27edb05fb74db9729636c5d9fc3, type: 3}
+      propertyPath: Gravity.WalkSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5361522909160091452, guid: 5d18e27edb05fb74db9729636c5d9fc3, type: 3}
+      propertyPath: Gravity.GravityPressure
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5361522909160091452, guid: 5d18e27edb05fb74db9729636c5d9fc3, type: 3}
+      propertyPath: Gravity.JumpContinueTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5361522909160091452, guid: 5d18e27edb05fb74db9729636c5d9fc3, type: 3}
+      propertyPath: Gravity.JumpContinueForce
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d18e27edb05fb74db9729636c5d9fc3, type: 3}
 --- !u!1 &1502654290
