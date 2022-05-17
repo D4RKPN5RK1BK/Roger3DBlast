@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: -3155746529459735924}
   - component: {fileID: -1109145742288414477}
   - component: {fileID: 9112853581144595384}
-  - component: {fileID: 5361522909160091452}
+  - component: {fileID: 3412327566478464115}
   m_Layer: 0
   m_Name: PlayerWIthCharacterController
   m_TagString: Player
@@ -206,7 +206,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &5361522909160091452
+--- !u!114 &3412327566478464115
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -215,20 +215,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 4593409579073036260}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7222e99a501e02d45b1bd262289a93b5, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a400950c3bc1734f932847b5df12c68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerRotationSpeed: 10
+  PlayerRotationSpeed: 16
   Gravity:
     JumpForce: 1
     JumpContinueTime: 1
-    JumpContinueForce: 1
+    JumpContinueForce: 0.2
     JumpControl: 1
-    FallSpeed: 1
+    FallSpeed: 2
     GravityPressure: 1
-    WalkSpeed: 1
-    Drag: 0.069
-    JumpDrag: 0.073
+    WalkSpeed: 2
+    Drag: 0.2
+    JumpDrag: 0.412
 --- !u!1 &6183395975278342408
 GameObject:
   m_ObjectHideFlags: 0
