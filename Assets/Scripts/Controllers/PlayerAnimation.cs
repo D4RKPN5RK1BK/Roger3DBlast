@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,23 +9,30 @@ public class PlayerAnimation : MonoBehaviour
 {
 
     private Animator animator;
-    private Rigidbody playerRigidbody;
-    private CharacterController player;
     private CharacterController controller;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        player = FindObjectOfType<CharacterControllerScript>().GetComponent<CharacterController>();
-        // playerRigidbody = player.GetComponent<Rigidbody>();
-        controller = player.GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        try
+        {
+            controller = transform.GetComponentInParent<CharacterController>();
+        }
+        catch (NullReferenceException ex)
+        {
+            Debug.Log("Ошибка при инициализции анимации персонажа: " + ex.Message);
+            gameObject.AddComponent<CharacterController>();
+            controller = GetComponent<CharacterController>();
+        }
+    }
+
     void Update()
     {
-        animator.SetBool("PlayerJump", !player.isGrounded);
+        animator.SetBool("PlayerJump", !controller.isGrounded);
         animator.SetFloat("PlayerSpeed", controller.velocity.magnitude);
     }
 }

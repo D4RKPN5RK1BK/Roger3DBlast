@@ -40,10 +40,16 @@ public class CameraController : MonoBehaviour
     {
         try
         {
-            GameObject player = FindObjectOfType<CharacterController>().gameObject;
+            GameObject player = FindObjectOfType<PlayerController>().gameObject;
+
+            Debug.Log("Тег объекта типа Player: " + player.tag);
+            // if (player.tag == "ObservablePoint")
+            //     observableObject = player;
+
             foreach (Transform t in player.transform)
             {
-                if (String.Equals(t.tag, "ObservablePoint"))
+                Debug.Log(t.tag);
+                if (t.tag == "ObservablePoint")
                 {
                     observableObject = t.gameObject;
                     break;
@@ -56,7 +62,7 @@ public class CameraController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogWarning(ex.Message);
+            Debug.LogWarning("Ошибка инициализации обозреваемого объекта: " + ex.Message);
             observableObject = Instantiate(new GameObject());
         }
         finally

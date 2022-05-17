@@ -13,20 +13,7 @@ public class CarriageController : MonoBehaviour
     {
         try
         {
-            // Transform parentTransform = transform;
-            // while (parentTransform != null || objRigidbody == null)
-            // {
-            //     if (parentTransform.tag == "Carriage")
-            //     {
-            //         objRigidbody = parentTransform.GetComponent<Rigidbody>();
-            //     }
-            //     parentTransform = parentTransform.parent;
-            // }
-            // if (objRigidbody == null)
-            // {
-            //     throw new NullReferenceException("Не найдены объекты с тегом \"Carriage\" которые бы содержали компонент \"Rigidbody\"");
-            // }
-            objRigidbody = transform.parent.GetComponent<Rigidbody>();
+            objRigidbody = transform.GetComponentInParent<Rigidbody>();
         }
         catch (NullReferenceException ex)
         {
@@ -45,7 +32,6 @@ public class CarriageController : MonoBehaviour
     {
         if (FolowingObject != null)
         {
-
             Vector3 direction = FolowingObject.transform.position - transform.position;
             Vector3 folowingForce = direction.normalized *  Mathf.Pow(direction.magnitude, 2) - direction.normalized * trainHead.CarriageDistance;
             objRigidbody.AddForce(folowingForce);
@@ -58,7 +44,7 @@ public class CarriageController : MonoBehaviour
         if (other.tag == "CarriagePickupArea" && FolowingObject == null)
         {
             Debug.Log("train trigger enter");
-            trainHead = other.transform.parent.gameObject.GetComponent<TrainController>();
+            trainHead = other.transform.GetComponentInParent<TrainController>();
             trainHead.AddCarriage(this);
         }
     }

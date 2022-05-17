@@ -3,34 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static PlayerActions;
 
-/*
-*   Отвечает за взаимодействие объекта с внешними триггерами и за его инициализацию   
-*
-*   Просто так это выбрасывать не хочется, да и к тому же интересным было бы сделать этот класс
-*   и CharacterController взаимозаменяемым (в один клик) чтобы потом мобам легче было с физикой взаимодействовать
-*
-*   Нужно определить что конкретно будет лежать на данных контроллерах
-*   У игрока по сути обработка и ответ на инпуты, так что у мобов скорее всего
-*   Обработка их стейтов и изменение поведения в зависисоти от окружения сцены.
-*/
+/**
+ *   Также как и остальные контроллеры отвечает за инициализацию всех зависимостей и компонентов
+ *   объекта, а также за обработку инпутов
+ *
+ *
+ *   Идеально было бы разбить на:
+ *   - [CHECK] класс отвечающий за гравитацию 
+ *   - всякие приколы по типу проверки родительских компонентов на соответствие
+ *     или поиск других объектов в сцене тоже вынести отдельно
+ *   - класс или апи для конвертации векторов (трансляция векторов от камеры объекту
+ *     или проекция векторов на плоскость)
+**/
 
-[RequireComponent(typeof(Rigidbody))]
+[Serializable]
+[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(GravityController))]
+[RequireComponent(typeof(HitPoints))]
 public class PlayerController : MonoBehaviour
 {
-    [Min(0)]
-    public float PlayerSpeed = 1;
+
     [Min(0)]
     public float PlayerRotationSpeed = 1;
-    [Min(0)]
-    public float PlayerJumpForce = 10;
+
     private GameObject character;
+
     private PlayerActions playerActions;
-    private Rigidbody rigetbody;
+
     private GameObject observerCamera;
-    private bool playerCanJump;
-    private bool playerJumpPosition;
+
+    private GravityController gravity;
+
+    private float JumpStartTime;
+
 
     void OnEnable()
     {
@@ -42,6 +48,15 @@ public class PlayerController : MonoBehaviour
         playerActions.Disable();
     }
 
+    void Awake()
+    {
+        playerActions = new PlayerActions();
+        playerActions.InGame.Jump.performed += Jump;
+        playerActions.InGame.Activate.performed += Activate;
+        gravity = GetComponent<GravityController>();
+    }
+
+    // Start is called before the first frame update
     void Start()
     {
         try
@@ -75,41 +90,31 @@ public class PlayerController : MonoBehaviour
             character = Instantiate(new GameObject());
         }
 
-        
+
+
     }
 
-    void Awake() {
-        rigetbody = GetComponent<Rigidbody>();
-        playerActions = new PlayerActions();
-        playerActions.InGame.Jump.performed += Jump;
-        playerActions.InGame.Activate.performed += Activate;
-    }
-
-
+    // Update is called once per frame
     void Update()
     {
-        Vector2 move = playerActions.InGame.Move.ReadValue<Vector2>();
-        Vector3 cameraPos = observerCamera.transform.position;
 
+        if (playerActions.InGame.Jump.IsPressed())
+        {
+            gravity.ContinueJump();
+        }
+
+        Vector2 move = playerActions.InGame.Move.ReadValue<Vector2>();
+
+        Vector3 cameraPos = observerCamera.transform.position;
         Vector3 forward = new Vector3(transform.position.x - cameraPos.x, 0, transform.position.z - cameraPos.z).normalized * move.y;
         Vector3 right = observerCamera.transform.right.normalized * move.x;
-
         Vector3 layedMove = forward + right;
-        rigetbody.AddForce(new Vector3(layedMove.x, 0, layedMove.z) * PlayerSpeed);
+
+        gravity.Move(new Vector3(layedMove.x, 0, layedMove.z));
 
         if (Vector2.zero != move)
             character.transform.forward = Vector3.RotateTowards(character.transform.forward, layedMove, Time.deltaTime * PlayerRotationSpeed, 0).normalized;
-    }
 
-    void Jump(InputAction.CallbackContext context)
-    {
-
-        if (playerCanJump)
-        {
-            playerJumpPosition = true;
-            rigetbody.AddForce(new Vector3(0, PlayerJumpForce, 0), ForceMode.VelocityChange);
-            playerCanJump = false;
-        }
     }
 
     void Activate(InputAction.CallbackContext context)
@@ -119,27 +124,10 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void OnCollisionEnter(Collision other)
+    void Jump(InputAction.CallbackContext context)
     {
-        if (other.gameObject.tag == "Surface")
-        {
-            playerJumpPosition = false;
-            playerCanJump = true;
-        }
-    }
-
-    void OnCollisionExit(Collision other)
-    {
-        if (other.gameObject.tag == "Surface")
-        {
-            playerJumpPosition = true;
-            playerCanJump = false;
-        }
-    }
-
-    public bool GetJumpState()
-    {
-        return playerJumpPosition;
+        Debug.Log("Jump action was perfomed");
+        gravity.Jump(Time.time);
     }
 
 }
