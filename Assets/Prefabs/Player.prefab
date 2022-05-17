@@ -93,9 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a400950c3bc1734f932847b5df12c68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerSpeed: 10
   PlayerRotationSpeed: 14
-  PlayerJumpForce: 10
 --- !u!114 &-3155746529459735924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,6 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48326a1bf1d93074eb7b21cb7d87ebe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CarriageDistance: 1
 --- !u!114 &-1109145742288414477
 MonoBehaviour:
   m_ObjectHideFlags: 0
