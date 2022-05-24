@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicAI : MonoBehaviour
+
+public class BasicAI 
 {
-    // Start is called before the first frame update
-    void Start()
-    {
+    public Vector2[] RoamPoints;
+    private bool TargetDetected;
+
+    public void RoamScript() {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void ActionScript() {
+
     }
 }

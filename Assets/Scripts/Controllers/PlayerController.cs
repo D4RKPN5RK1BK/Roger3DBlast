@@ -11,10 +11,12 @@ using UnityEngine.InputSystem;
  *
  *   Идеально было бы разбить на:
  *   - [CHECK] класс отвечающий за гравитацию 
- *   - всякие приколы по типу проверки родительских компонентов на соответствие
- *     или поиск других объектов в сцене тоже вынести отдельно
- *   - класс или апи для конвертации векторов (трансляция векторов от камеры объекту
- *     или проекция векторов на плоскость)
+ *   - [CHECK] всякие приколы по типу проверки родительских компонентов на соответствие
+ *     или поиск других объектов в сцене тоже вынести отдельно (в юньке уже усть втроенные
+ *     для этого функции)
+ *   - [CHECK]класс или апи для конвертации векторов (трансляция векторов от камеры объекту
+ *     или проекция векторов на плоскость) (в итоге кнвертация уместилась в две строчки кода,
+ *     так что не вижу смысла делать для этого отдельный класс)
 **/
 
 [Serializable]
@@ -105,28 +107,21 @@ public class PlayerController : MonoBehaviour
 
         Vector2 move = playerActions.InGame.Move.ReadValue<Vector2>();
 
-        Vector3 cameraPos = observerCamera.transform.position;
-        Vector3 forward = new Vector3(transform.position.x - cameraPos.x, 0, transform.position.z - cameraPos.z).normalized * move.y;
+        Vector3 forward = Vector3.ProjectOnPlane(observerCamera.transform.forward, Vector3.up).normalized * move.y;
         Vector3 right = observerCamera.transform.right.normalized * move.x;
-        Vector3 layedMove = forward + right;
 
-        gravity.Move(new Vector3(layedMove.x, 0, layedMove.z));
-
-        if (Vector2.zero != move)
-            character.transform.forward = Vector3.RotateTowards(character.transform.forward, layedMove, Time.deltaTime * PlayerRotationSpeed, 0).normalized;
+        gravity.Walk(forward + right);
 
     }
 
     void Activate(InputAction.CallbackContext context)
     {
         Debug.Log("Player Activate his current ability!");
-
-
     }
 
     void Jump(InputAction.CallbackContext context)
     {
-        Debug.Log("Jump action was perfomed");
+        // Debug.Log("Jump action was perfomed");
         gravity.Jump(Time.time);
     }
 
