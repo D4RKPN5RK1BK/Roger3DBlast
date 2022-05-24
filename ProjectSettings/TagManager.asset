@@ -10,6 +10,7 @@ TagManager:
   - Character
   - FloatingArea
   - CarriagePickupArea
+  - Enemy
   layers:
   - Default
   - TransparentFX
