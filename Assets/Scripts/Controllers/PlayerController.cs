@@ -26,9 +26,6 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
 
-    [Min(0)]
-    public float PlayerRotationSpeed = 1;
-
     private GameObject character;
 
     private PlayerActions playerActions;
@@ -36,6 +33,8 @@ public class PlayerController : MonoBehaviour
     private GameObject observerCamera;
 
     private GravityController gravity;
+
+    private HurtBox hurtBox;
 
     private float JumpStartTime;
 
@@ -64,6 +63,8 @@ public class PlayerController : MonoBehaviour
         try
         {
             observerCamera = FindObjectOfType<CameraController>().gameObject;
+            hurtBox = GetComponentInChildren<HurtBox>();
+            // hurtBox.HurtHandler += OnDamageTake;
         }
         catch (NullReferenceException ex)
         {
@@ -114,15 +115,23 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    // Активация способности
     void Activate(InputAction.CallbackContext context)
     {
         Debug.Log("Player Activate his current ability!");
     }
 
+
+    // Прыжок
     void Jump(InputAction.CallbackContext context)
     {
         // Debug.Log("Jump action was perfomed");
-        gravity.Jump(Time.time);
+        gravity.Jump();
+    }
+
+    // Обработка столкновения с хитбоксом
+    void OnDamageTake() {
+        gravity.Jump();
     }
 
 }

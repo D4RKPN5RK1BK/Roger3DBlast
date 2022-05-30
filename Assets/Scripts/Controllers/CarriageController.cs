@@ -3,29 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(GravityController))]
 public class CarriageController : MonoBehaviour
 {
     [NonSerialized]
     public GameObject FolowingObject;
-    private Rigidbody objRigidbody;
+    public GravityController gravity;
     private TrainController trainHead;
     void Start()
     {
-        try
-        {
-            objRigidbody = transform.GetComponentInParent<Rigidbody>();
-        }
-        catch (NullReferenceException ex)
-        {
-            Debug.LogWarning(ex.Message);
-            transform.gameObject.AddComponent<Rigidbody>();
-            objRigidbody = GetComponent<Rigidbody>();
-        }
+
     }
 
     void Awake()
     {
-        // Debug.Log("Carriage object was successefuly intialized!");
+        gravity = GetComponent<GravityController>();
     }
 
     void Update()
@@ -34,7 +26,7 @@ public class CarriageController : MonoBehaviour
         {
             Vector3 direction = FolowingObject.transform.position - transform.position;
             Vector3 folowingForce = direction.normalized *  Mathf.Pow(direction.magnitude, 2) - direction.normalized * trainHead.CarriageDistance;
-            objRigidbody.AddForce(folowingForce);
+            // objRigidbody.AddForce(folowingForce);
         }
 
     }
@@ -43,7 +35,6 @@ public class CarriageController : MonoBehaviour
     {
         if (other.tag == "CarriagePickupArea" && FolowingObject == null)
         {
-            Debug.Log("train trigger enter");
             trainHead = other.transform.GetComponentInParent<TrainController>();
             trainHead.AddCarriage(this);
         }

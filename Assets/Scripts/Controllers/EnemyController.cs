@@ -8,11 +8,14 @@ using UnityEngine;
 [RequireComponent(typeof(HitPoints))]
 public class EnemyController : MonoBehaviour
 {
-    public BaseRouting AI;
+    public BaseRouting Routing;
     private GravityController gravity;
     private Action behaviour;
+    private HurtBox hurtBox;
 
-    void Awake() {
+
+    void Awake()
+    {
         gravity = GetComponent<GravityController>();
 
     }
@@ -20,9 +23,20 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (AI != null) {
+        if (Routing != null)
+        {
             behaviour += Roaming;
         }
+
+        try
+        {
+            hurtBox = GetComponentInChildren<HurtBox>();
+        }
+        catch (NullReferenceException ex)
+        {
+            Debug.Log("Контроллер противников не смог обнаружить дочерный элемент HurtBox:\n" + ex.Message);
+        }
+
     }
 
     // Update is called once per frame
@@ -31,7 +45,19 @@ public class EnemyController : MonoBehaviour
         behaviour?.Invoke();
     }
 
-    void Roaming() {
-        gravity.Walk(Vector3.ProjectOnPlane((AI.CurrentTarget - transform.position).normalized, Vector3.up));
+    void Roaming()
+    {
+        Vector3 dest = Routing.CurrentTarget - transform.position;
+        if (dest.magnitude < 1)
+        {
+            Routing.NextTarget();
+        }
+        gravity.Walk(Vector3.ProjectOnPlane(dest.normalized, Vector3.up));
+
+    }
+
+    void OnDamageTake()
+    {
+        Debug.Log("Противник получил урон");
     }
 }

@@ -9,4 +9,8 @@ public class Standing : BaseRouting
     public override Vector3 CurrentTarget {
         get => Target + transform.position;
     }
+
+    public override void NextTarget()
+    {
+    }
 }

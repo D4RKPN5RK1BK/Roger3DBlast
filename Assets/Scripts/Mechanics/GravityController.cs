@@ -8,9 +8,6 @@ using UnityEngine;
  *  так и на прямой контроль через чтнеие инпутов.
  * 
  *  Реализует базовые методы по типу ходьба, бег, прыжок.
- * 
- *  В зависимости от дальнейшей разработки может появиться и деш, отталкивание
- *  или даже телепортация.
  **/
 
 [RequireComponent(typeof(CharacterController))]
@@ -75,8 +72,10 @@ public class GravityController : MonoBehaviour
         }
         catch (NullReferenceException ex)
         {
-            Debug.LogWarning("Не удалось найти дочерний объек character!");
-            GameObject temp = Instantiate(new GameObject("character"));
+            Debug.LogWarning("Не удалось найти дочерний объек Character!\n" + ex.Message);
+            GameObject temp = Instantiate(new GameObject("Character"));
+            temp.transform.SetParent(transform.parent);
+            transform.SetParent(temp.transform);
         }
     }
 
@@ -123,11 +122,11 @@ public class GravityController : MonoBehaviour
             character.transform.forward = Vector3.RotateTowards(character.transform.forward, motion, Time.deltaTime * RotationSpeed, 0).normalized;
     }
 
-    public void Jump(float time)
+    public void Jump()
     {
         if (controller.isGrounded)
         {
-            jumpStartTime = time;
+            jumpStartTime = Time.time;
             jumpInertion += Vector3.up * JumpForce + _motion * moveInertion.magnitude;
         }
     }
@@ -136,5 +135,17 @@ public class GravityController : MonoBehaviour
     {
         if (jumpStartTime + JumpContinueTime > Time.time)
             jumpInertion += Vector3.up * JumpContinueForce * Time.deltaTime;
+    }
+
+    public void Knockback() {
+        jumpInertion = (Vector3.up -_motion) * JumpForce  ;
+    }
+
+    public void Knockback(Vector3 direction) {
+        jumpInertion = Vector3.up * JumpForce + direction * moveInertion.magnitude;
+    }
+
+    public void Float(float streght) {
+        jumpInertion += Vector3.up * streght * Time.deltaTime;
     }
 }

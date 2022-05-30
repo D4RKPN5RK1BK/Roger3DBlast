@@ -42,13 +42,11 @@ public class CameraController : MonoBehaviour
         {
             GameObject player = FindObjectOfType<PlayerController>().gameObject;
 
-            Debug.Log("Тег объекта типа Player: " + player.tag);
             // if (player.tag == "ObservablePoint")
             //     observableObject = player;
 
             foreach (Transform t in player.transform)
             {
-                Debug.Log(t.tag);
                 if (t.tag == "ObservablePoint")
                 {
                     observableObject = t.gameObject;

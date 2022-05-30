@@ -11,4 +11,8 @@ public class Patruling : BaseRouting
 {
     public Vector3 StartPosition;
     public Vector3 EndPosition;
+
+    public override void NextTarget() {
+
+    }
 }
