@@ -6,6 +6,8 @@ public class PlayerHurtBox : BaseHurtBox
     private GravityController gravity;
     private HitPoints hitPoints;
     private SphereCollider hurtBox;
+
+    public Action HurtHandlerAction;
     void Awake()
     {
         hurtBox = GetComponent<SphereCollider>();
@@ -30,23 +32,14 @@ public class PlayerHurtBox : BaseHurtBox
         }
     }
 
-    void Update()
-    { 
-        
-    }
-
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "HitBox") {
-            Debug.Log("Игрок получает демедж");
             HurtHandler();
         }
-
-        Debug.Log(other.tag);
     }
     
-    public override void HurtHandler() {
-        Debug.Log($"ОБъект {this.gameObject.name} получил урон");
-        gravity.Knockback();
-    }
+    // public override void HurtHandler() {
+    //     gravity.Knockback();
+    // }
 }

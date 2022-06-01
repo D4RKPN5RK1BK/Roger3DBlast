@@ -11,7 +11,14 @@ public class EnemyController : MonoBehaviour
     public BaseRouting Routing;
     private GravityController gravity;
     private Action behaviour;
-    private HurtBox hurtBox;
+    private BaseHurtBox hurtBox;
+    // private ParticiesExplosion particies;
+    private GameObject character;
+    private GameObject particies;
+    public float SecondsToWait;
+
+    private bool wait;
+    private float waitForTime;
 
 
     void Awake()
@@ -30,11 +37,14 @@ public class EnemyController : MonoBehaviour
 
         try
         {
-            hurtBox = GetComponentInChildren<HurtBox>();
+            hurtBox = GetComponentInChildren<EnemyHurtBox>();
+            hurtBox.HurtHandler += OnDamageTake;
+            character = transform.Find("Character").gameObject;
+            particies = transform.Find("CubeParticies").gameObject;
         }
         catch (NullReferenceException ex)
         {
-            Debug.Log("Контроллер противников не смог обнаружить дочерный элемент HurtBox:\n" + ex.Message);
+            Debug.Log("Контроллер противников не смог обнаружить дочерный элемент:\n" + ex.Message);
         }
 
     }
@@ -42,6 +52,10 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (wait && waitForTime < Time.time)
+            wait = false;
+
+
         behaviour?.Invoke();
     }
 
@@ -51,13 +65,22 @@ public class EnemyController : MonoBehaviour
         if (dest.magnitude < 1)
         {
             Routing.NextTarget();
+            wait = true;
+            waitForTime = Time.time + SecondsToWait;
         }
-        gravity.Walk(Vector3.ProjectOnPlane(dest.normalized, Vector3.up));
+
+        if (!wait)
+            gravity.Walk(Vector3.ProjectOnPlane(dest.normalized, Vector3.up));
 
     }
 
     void OnDamageTake()
     {
         Debug.Log("Противник получил урон");
+        particies.gameObject.SetActive(true);
+        // particies.Explode();
+        character.SetActive(false);
+        // behaviour -= Roaming;
+
     }
 }

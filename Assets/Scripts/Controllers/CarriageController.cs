@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(GravityController))]
+// [RequireComponent(typeof(GravityController))]
 public class CarriageController : MonoBehaviour
 {
     [NonSerialized]
@@ -17,15 +17,20 @@ public class CarriageController : MonoBehaviour
 
     void Awake()
     {
-        gravity = GetComponent<GravityController>();
+        gravity = GetComponentInParent<GravityController>();
     }
 
     void Update()
     {
         if (FolowingObject != null)
         {
-            Vector3 direction = FolowingObject.transform.position - transform.position;
-            Vector3 folowingForce = direction.normalized *  Mathf.Pow(direction.magnitude, 2) - direction.normalized * trainHead.CarriageDistance;
+            Vector3 target = FolowingObject.transform.position - transform.position;
+            Vector3 targetProjection = Vector3.ProjectOnPlane(target, Vector3.up);
+            // target = target - target.normalized * trainHead.CarriageDistance;
+            if (trainHead.CarriageDistance < targetProjection.magnitude)
+                gravity.Walk(targetProjection.normalized);
+            // Vector3 direction = FolowingObject.transform.position - transform.position;
+            // Vector3 folowingForce = direction.normalized *  Mathf.Pow(direction.magnitude, 2) - direction.normalized * trainHead.CarriageDistance;
             // objRigidbody.AddForce(folowingForce);
         }
 
@@ -35,7 +40,8 @@ public class CarriageController : MonoBehaviour
     {
         if (other.tag == "CarriagePickupArea" && FolowingObject == null)
         {
-            trainHead = other.transform.GetComponentInParent<TrainController>();
+            trainHead = other.GetComponentInParent<TrainController>();
+            gravity.WalkSpeed = other.GetComponentInParent<GravityController>().WalkSpeed;
             trainHead.AddCarriage(this);
         }
     }

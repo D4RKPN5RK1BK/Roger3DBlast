@@ -5,23 +5,22 @@ using UnityEngine;
 
 public class Floater : MonoBehaviour
 {
-    private Rigidbody parentRigidbody;
-    
-    void Start() {
-        try {
-            parentRigidbody = transform.parent.GetComponent<Rigidbody>();
-        }
-        catch(NullReferenceException ex) {
-            Debug.LogWarning(ex);
-            transform.parent.gameObject.AddComponent<Rigidbody>();
-        }
+    private GravityController gravity;
+
+
+
+    void Start()
+    {
+        gravity = GetComponentInParent<GravityController>();
     }
 
-    void OnTriggerStay(Collider other) {
-        if(other.tag == "Surface") {
-            float distance = (transform.position - other.transform.position).magnitude;
-            parentRigidbody.AddForce(0, 60 / distance, 0);
+    void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Surface")
+        {
+            float distance = (transform.position - other.ClosestPoint(transform.position)).magnitude;
+            gravity.Float(20 / distance * Time.deltaTime);
         }
-        
+
     }
 }

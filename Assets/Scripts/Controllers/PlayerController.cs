@@ -34,7 +34,11 @@ public class PlayerController : MonoBehaviour
 
     private GravityController gravity;
 
-    private HurtBox hurtBox;
+    private CharacterController controller;
+
+    private BaseHurtBox hurtBox;
+
+    private PlayerHitBox hitBox;
 
     private float JumpStartTime;
 
@@ -55,6 +59,7 @@ public class PlayerController : MonoBehaviour
         playerActions.InGame.Jump.performed += Jump;
         playerActions.InGame.Activate.performed += Activate;
         gravity = GetComponent<GravityController>();
+        controller = GetComponent<CharacterController>();
     }
 
     // Start is called before the first frame update
@@ -63,8 +68,10 @@ public class PlayerController : MonoBehaviour
         try
         {
             observerCamera = FindObjectOfType<CameraController>().gameObject;
-            hurtBox = GetComponentInChildren<HurtBox>();
-            // hurtBox.HurtHandler += OnDamageTake;
+            hurtBox = GetComponentInChildren<PlayerHurtBox>();
+            hitBox = GetComponentInChildren<PlayerHitBox>();
+            hurtBox.HurtHandler += OnDamageTake;
+            hitBox.DelegateHitHandler += OnDamageDeal;
         }
         catch (NullReferenceException ex)
         {
@@ -106,6 +113,11 @@ public class PlayerController : MonoBehaviour
             gravity.ContinueJump();
         }
 
+        if (controller.isGrounded)
+        {
+            hitBox.EndAtack();
+        }
+
         Vector2 move = playerActions.InGame.Move.ReadValue<Vector2>();
 
         Vector3 forward = Vector3.ProjectOnPlane(observerCamera.transform.forward, Vector3.up).normalized * move.y;
@@ -126,12 +138,20 @@ public class PlayerController : MonoBehaviour
     void Jump(InputAction.CallbackContext context)
     {
         // Debug.Log("Jump action was perfomed");
+        Debug.Log("Персонаж совершил прыжок!");
         gravity.Jump();
+        hitBox.StartAtack();
     }
 
     // Обработка столкновения с хитбоксом
-    void OnDamageTake() {
-        gravity.Jump();
+    void OnDamageTake()
+    {
+        gravity.Knockback(Vector3.up);
+    }
+
+    void OnDamageDeal()
+    {
+        gravity.Knockback();
     }
 
 }

@@ -30,23 +30,17 @@ public class EnemyHurtBox : BaseHurtBox
         }
     }
 
-    void Update()
-    { 
-        
-    }
-
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "HitBox") {
-            Debug.Log("Противник получает демедж");
+            // Debug.Log("Противник получает демедж");
             HurtHandler();
         }
-
-        Debug.Log("Enemy Trigger");
     }
     
-    public override void HurtHandler() {
-        // Debug.Log($"ОБъект {this.gameObject.name} получил урон");
-        gravity.Knockback();
-    }
+    // public override void HurtHandler() {
+    //     // Debug.Log($"ОБъект {this.gameObject.name} получил урон");
+
+    //     gravity.Knockback();
+    // }
 }
