@@ -41,7 +41,12 @@ public class CarriageController : MonoBehaviour
         if (other.tag == "CarriagePickupArea" && FolowingObject == null)
         {
             trainHead = other.GetComponentInParent<TrainController>();
-            gravity.WalkSpeed = other.GetComponentInParent<GravityController>().WalkSpeed;
+            var otherController = other.GetComponentInParent<GravityController>();
+            gravity.WalkSpeed = otherController.WalkSpeed;
+            gravity.JumpForce = otherController.JumpForce;
+            gravity.FallSpeed = otherController.FallSpeed;
+            gravity.Drag = otherController.Drag;
+            gravity.JumpDrag = otherController.JumpDrag;
             trainHead.AddCarriage(this);
         }
     }

@@ -90,6 +90,7 @@ public class GravityController : MonoBehaviour
         {
             fallInertion += Vector3.down * Time.deltaTime * FallSpeed;
         }
+
         controller.Move(jumpInertion + fallInertion + moveInertion);
 
 
@@ -137,15 +138,18 @@ public class GravityController : MonoBehaviour
             jumpInertion += Vector3.up * JumpContinueForce * Time.deltaTime;
     }
 
-    public void Knockback() {
-        jumpInertion = (Vector3.up -_motion) * JumpForce  ;
+    public void Knockback()
+    {
+        jumpInertion = (Vector3.up - _motion) * JumpForce;
     }
 
-    public void Knockback(Vector3 direction) {
+    public void Knockback(Vector3 direction)
+    {
         jumpInertion = Vector3.up * JumpForce + direction * moveInertion.magnitude;
     }
 
-    public void Float(float streght) {
-        jumpInertion += Vector3.up * streght * Time.deltaTime;
+    public void Float(float strenght)
+    {
+        jumpInertion += Vector3.up * strenght * Time.deltaTime;
     }
 }

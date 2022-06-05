@@ -6,6 +6,10 @@ public class TrainController : MonoBehaviour
 {
     [Min(0)]
     public float CarriageDistance = 1;
+
+    [Min(0)]
+    public float JumpDelay = 1;
+    
     private List<GameObject> carriages;
 
     void Awake()
