@@ -1,4 +1,14 @@
-Shader "Custom/Standart"
+/**
+ *  Lit shader c подробными комментариями для понимашия основ написания
+ *  шейдеров в Unity.
+ *  
+ *  В данном шейдере опускаюются базовые моменты, все они указаны в 
+ *  комментариях к UnlitExample шейдеру.
+ *
+ *  Лучше шейдерграфы использовать. А то для кого их делали :P
+**/
+
+Shader "Test/StandartExample"
 {
     Properties
     {
@@ -14,10 +24,11 @@ Shader "Custom/Standart"
         LOD 200
 
         CGPROGRAM
-        // Physically based Standard lighting model, and enable shadows on all light types
+
+        // Физическая модель освещения, и включенный тени всех видов освещений
         #pragma surface surf Standard fullforwardshadows
 
-        // Use shader model 3.0 target, to get nicer looking lighting
+        // Использует модель шейдеров 3.0 для наилучшего освещения
         #pragma target 3.0
 
         sampler2D _MainTex;

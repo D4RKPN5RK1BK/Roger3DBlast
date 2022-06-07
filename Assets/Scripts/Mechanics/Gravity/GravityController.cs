@@ -145,7 +145,8 @@ public class GravityController : MonoBehaviour
 
     public void Knockback(Vector3 direction)
     {
-        jumpInertion = Vector3.up * JumpForce + direction * moveInertion.magnitude;
+        jumpInertion = direction * JumpForce;
+        Debug.Log("\nИнерция прыжка после отталкивания: " + jumpInertion + " (" + direction + "," + JumpForce + ")");
     }
 
     public void Float(float strenght)

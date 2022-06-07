@@ -9,12 +9,14 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     public BaseRouting Routing;
+    public PoolController poolController;
+
+    public int ParticiesCount = 0;
+
     private GravityController gravity;
     private Action behaviour;
     private BaseHurtBox hurtBox;
-    // private ParticiesExplosion particies;
     private GameObject character;
-    private GameObject particies;
     public float SecondsToWait;
 
     private bool wait;
@@ -40,7 +42,9 @@ public class EnemyController : MonoBehaviour
             hurtBox = GetComponentInChildren<EnemyHurtBox>();
             hurtBox.HurtHandler += OnDamageTake;
             character = transform.Find("Character").gameObject;
-            particies = transform.Find("CubeParticies").gameObject;
+            poolController = FindObjectOfType<PoolController>();
+            // afterDeathParticies = FindObjectOfType<PoolController>();
+
         }
         catch (NullReferenceException ex)
         {
@@ -77,10 +81,15 @@ public class EnemyController : MonoBehaviour
     void OnDamageTake()
     {
         Debug.Log("Противник получил урон");
-        particies.gameObject.SetActive(true);
-        // particies.Explode();
         character.SetActive(false);
-        // behaviour -= Roaming;
 
+        var particies = poolController.Take("RedCubeParticies", 20);
+        foreach (var p in particies)
+            p.GetComponent<ParticiresController>().Acitivate(transform.position, "RedCubeParticies");
+    }
+
+    public void Reset()
+    {
+        
     }
 }

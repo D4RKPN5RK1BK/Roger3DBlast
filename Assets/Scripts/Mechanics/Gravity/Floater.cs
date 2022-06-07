@@ -27,7 +27,6 @@ public class Floater : MonoBehaviour
             float distance = (transform.position - other.ClosestPoint(transform.position)).magnitude;
             float finalForce = ((floatCollider.radius - distance) / floatCollider.radius) * Force;
             gravity.Float(finalForce * Time.deltaTime);
-            Debug.Log("FloaterForce: " + finalForce);
         }
 
     }
