@@ -1,3 +1,7 @@
+/**
+*   Базовый cel шейдер, без отбрасывания и принятия теней
+**/
+
 Shader "Test/CelShading"
 {
     Properties
@@ -10,7 +14,7 @@ Shader "Test/CelShading"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Opaque" "PassFlags"="OnlyDirectional"}
         LOD 100
 
         Pass

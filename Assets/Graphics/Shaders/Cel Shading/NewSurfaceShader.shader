@@ -1,4 +1,4 @@
-Shader "Custom/LitCellShading"
+Shader "Custom/NewSurfaceShader"
 {
     Properties
     {
